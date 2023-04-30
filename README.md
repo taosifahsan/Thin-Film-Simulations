@@ -69,3 +69,9 @@ We used this for numerical calculation of infinite thin film with Oh>>1
   plot_heights(t_r,x,h,Ts,fsize)
   plot_velocities(t_r,x,h,Ts,fsize)   
   plot_V_TC(t_r,u,fsize)  
+  
+  
+There are some additional programs. We calculated traffic flow problem using traffic_flow.m and we compared the runtime of thomas algorithm and direct matlab matrix inversion using tridiagonal_alg_check.m
+
+
+  
