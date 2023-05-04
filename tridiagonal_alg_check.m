@@ -1,6 +1,6 @@
 % create matrix A for implicit part
 % these three digonal arrays are only non zero entries of Matrix A
-%{
+
 repeat = 100;
 cut = 6;
 start_value = 18;
@@ -77,7 +77,7 @@ str_tri = 'slope = '+string(round(coeff_tri(1),2));
 
 fit_direct = coeff_direct(2)+coeff_direct(1)*X;
 fit_tri = coeff_tri(2)+coeff_tri(1)*X;
-%}
+
 fsize = 18;
 figure
 fig=errorbar(X,Y_direct, err_direct,'o','linewidth',1.5);
