@@ -9,18 +9,18 @@ dt = T/NT; %time gap
 
 Nframe = min(NT,1e5); %number of frames to be saved
 
-[t_r,h,u] = simulate(T,dt,dx,L,Nframe);
+[t,h,u] = simulate(T,dt,dx,L,Nframe);
 
-Ts = round(linspace(1,5,5)*length(t_r)/5); %more showed
+Ts = round(linspace(1,5,5)*length(t)/5); %more showed
 Ts_vel = round(linspace(1,500,5)); %more showed
 fsize = 18; %fontsize 
 
 % title of the calculations and figures
 s = 'L = %2.0f, Total Time = %2.0f, \\Delta x = %1.0e, \\Delta t = %1.0e';
 title_string = sprintf(s,L,T,dx,dt);
-plot_heights(t_r,x,h,Ts,fsize)
-plot_velocities(t_r,x,h,Ts,fsize)   
-plot_V_TC(t_r,u,fsize)  
+plot_heights(t,x,h,Ts,fsize)
+plot_velocities(t,x,h,Ts,fsize)   
+plot_V_TC(t,u,fsize)  
 
 
 function [t_save,h_save,u_save] = simulate(T,dt,dx,L,Nframe)
