@@ -98,7 +98,6 @@ Plot the results using these methods.
   
   plot_V_TC(t_r,u,fsize). 
   
-  
 There are some additional programs. We calculated traffic flow problem using traffic_flow.m in appendix A.
 
 We compared the runtime of thomas algorithm and direct matlab matrix inversion using tridiagonal_alg_check.m in appendix B.
