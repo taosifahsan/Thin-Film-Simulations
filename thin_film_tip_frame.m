@@ -272,7 +272,7 @@ end
 
 %--------------------------------------------------------------------------
 % Solve Tridiagonal Matrix System
-% cite: % cite: L.H. Thomas. Elliptic problems in linear difference equations
+% cite: L.H. Thomas. Elliptic problems in linear difference equations
 % over a network. Watson Sc. Comp. Lab. Rep., 1949.
 %--------------------------------------------------------------------------
 function x = solve_tridiagnoal(A_0,A_minus,A_plus,d)
