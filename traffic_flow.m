@@ -104,7 +104,8 @@ function y=D(f,dx)
     y(1)=2*y(2)-y(3);
     y(N)=2*y(N-1)-y(N-2);
 end
-
+% cite: L.H. Thomas. Elliptic problems in linear difference equations over a
+% network. Watson Sc. Comp. Lab. Rep., 1949.
 function x = solve_tridiagnoal(A_0,A_minus,A_plus,d)
     n = length(d);
     x = linspace(0,0,n);
