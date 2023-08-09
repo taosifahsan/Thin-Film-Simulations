@@ -3,7 +3,7 @@ We are simulating retraction of a thin film after rupture in various situations.
 
 There are three source codes. All are written in matlab. They are implemented from scratch without any use of library or packages. 
 
-# Source Code 1: thin_film_lab_frame.m. 
+# Source Code 1: thin_film.m 
 We are simulating evolution of a finite thin film in laboratory frame. Section III used this.
 
   The following parameters controls the motion of the thin film.
@@ -34,7 +34,7 @@ After getting the results, plot using the following methods.
   
   plot_maximum_height(t,h,epsilon,Oh)  this plots the maximum height in the thin film.
   
-# Source Code 2: thin_film_tip_frame.m.
+# Source Code 2: thin_film_L>>1.m
 
 We are simulating evolution of an infinite thin film in tip frame. Section VI used this.
   
@@ -63,8 +63,24 @@ After getting the results, plot using the following methods.
   plot_tip_velocity(t,v,Oh) this plots retraction speed of the tip.
   
   plot_maximum_height(t,h,Oh) this plots the maximum height in the thin film.
+  
+# Source Code 3: thin_film_Oh>>1.m.
 
-# Source Code 3: thin_film_asymptotic.m.
+We used this for numerical calculation of a more general finite thin film with Oh>>1 for various aspect-ratio/Oh values. Subsection V.7 used this. 
+
+  L = aspect-ratio/Oh;
+  
+  T = total time of simulation;
+  
+  N = number of spatial bins;
+  
+  NT = numbers of time bins;
+
+Simulate and plot the results for an array of parameters using the following function. Setting plot_all = 1 will plot all of the results of the simulation. Otherwise it will only plot the v_max vs L, t_max vs L, t_phase vs L and t_phase_duration vs L graphs. 
+
+  run_code_array(L,T,N,NT,plot_all)
+
+# Source Code 3: thin_film_L=infty_Oh>>1.m
 
 We used this for numerical calculation of infinite thin film with Oh>>1 and aspect-ratio/Oh>>1. Subsection V.7 used this. 
 
@@ -98,22 +114,6 @@ Plot the results using these methods.
   
   plot_V_TC(t_r,u,fsize). 
 
-
-# Source Code 4: thin_film_asymp_improv.m.
-
-We used this for numerical calculation of a more general finite thin film with Oh>>1 for various aspect-ratio/Oh values. Subsection V.7 used this. 
-
-  L = aspect-ratio/Oh;
-  
-  T = total time of simulation;
-  
-  N = number of spatial bins;
-  
-  NT = numbers of time bins;
-
-Simulate and plot the results for an array of parameters using the following function. Setting plot_all = 1 will plot all of the results of the simulation. Otherwise it will only plot the v_max vs L, t_max vs L, t_phase vs L and t_phase_duration vs L graphs. 
-
-  run_code_array(L,T,N,NT,plot_all)
 
 # Extra Source Codes: 
 
