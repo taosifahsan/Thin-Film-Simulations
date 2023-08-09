@@ -34,7 +34,7 @@ After getting the results, plot using the following methods.
   
   plot_maximum_height(t,h,epsilon,Oh)  this plots the maximum height in the thin film.
   
-# Source Code 2: thin_film_L>>1.m
+# Source Code 2: thin_film_L=infty.m
 
 We are simulating evolution of an infinite thin film in tip frame. Section VI used this.
   
