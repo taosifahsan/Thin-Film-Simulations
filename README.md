@@ -111,11 +111,7 @@ We used this for numerical calculation of a more general finite thin film with O
   
   NT = numbers of time bins;
 
-Simulate and plot the results for a single set of parameters using the following function
-
-  run_code(L,T,N,NT)
-
-Simulate and plot the results for an array of parameters using the following function. Setting plot_all = 1 will plot all of the results of the simulation. Otherwise it will only plot the v_max vs L, t_max vs L, t_phase vs L graphs. 
+Simulate and plot the results for an array of parameters using the following function. Setting plot_all = 1 will plot all of the results of the simulation. Otherwise it will only plot the v_max vs L, t_max vs L, t_phase vs L and t_phase_duration vs L graphs. 
 
   run_code_array(L,T,N,NT,plot_all)
 
