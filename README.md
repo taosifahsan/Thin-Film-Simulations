@@ -66,7 +66,7 @@ After getting the results, plot using the following methods.
 
 # Source Code 3: thin_film_asymptotic.m.
 
-We used this for numerical calculation of infinite thin film with Oh>>1. Subsection V.7 used this. 
+We used this for numerical calculation of infinite thin film with Oh>>1 and aspect-ratio/Oh>>1. Subsection V.7 used this. 
 
   N =  number of space bins.  
   
@@ -97,6 +97,21 @@ Plot the results using these methods.
   plot_velocities(t_r,x,h,Ts,fsize). 
   
   plot_V_TC(t_r,u,fsize). 
+
+
+# Source Code 4: thin_film_asymp_improv.m.
+
+We used this for numerical calculation of a more general finite thin film with Oh>>1 for various aspect-ratio/Oh values. Subsection V.7 used this. 
+  L = aspect-ratio/Oh;
+  T = total time of simulation;
+  N = number of spatial bins;
+  NT = numbers of time bins;
+
+Simulate and plot the results for a single set of parameters using the following function
+  run_code(L,T,N,NT)
+
+Simulate and plot the results for an array of parameters using the following function. Setting plot_all = 1 will plot all of the results of the simulation. Otherwise it will only plot the v_max vs L, t_max vs L, t_phase vs L graphs. 
+  run_code_array(L,T,N,NT,plot_all)
 
 # Extra Source Codes: 
 
