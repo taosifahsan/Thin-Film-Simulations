@@ -89,7 +89,7 @@ function [hf,sf] = step(dt,x,sn,tn,hn)
     hf = h_step(dt,x,sn,sf,tn,hn); % rough update hf
     
     sf = s_step(dt,dx,sn,tn,hn,hf); % accurate update of sf
-    %hf = h_step(dt,x,sn,sf,tn,hn); % accurate update hf
+    hf = h_step(dt,x,sn,sf,tn,hn); % accurate update hf
 end
 
 function sf = s_step(dt,dx,sn,tn,hn,hf)
