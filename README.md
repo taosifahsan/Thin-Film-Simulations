@@ -64,7 +64,7 @@ After getting the results, plot using the following methods.
   
   plot_maximum_height(t,h,Oh) this plots the maximum height in the thin film.
   
-# Source Code 3: thin_film_Oh>>1.m.
+# Source Code 3: thin_film_Oh_large.m.
 
 We used this for numerical calculation of a more general finite thin film with Oh>>1 for various aspect-ratio/Oh values. Subsection V.7 used this. 
 
@@ -80,7 +80,7 @@ Simulate and plot the results for an array of parameters using the following fun
 
   run_code_array(L,T,N,NT,plot_all)
 
-# Source Code 3: thin_film_L=infty_Oh>>1.m
+# Source Code 3: thin_film_L=infty_Oh_large.m
 
 We used this for numerical calculation of infinite thin film with Oh>>1 and aspect-ratio/Oh>>1. Subsection V.7 used this. 
 
