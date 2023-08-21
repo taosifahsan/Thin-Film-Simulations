@@ -20,11 +20,11 @@ function run_code_array(L,T,N,NT,plot_all)
         Nframe = min(NT(i),10^5);
         [t,x,h,v]=simulate(L(i),N(i),T(i),NT(i),Nframe);
         if plot_all == 1
-           %plot_graph(L-x,h,T(i),Nframe,L(i),2,'Height')
-           %plot_graph(L-x,v,T(i),Nframe,L(i),2,'Velocity')
-           %plot_hwall(t,h,L(i),2)
+           plot_graph(L-x,h,T(i),Nframe,L(i),2,'Height')
+           plot_graph(L-x,v,T(i),Nframe,L(i),2,'Velocity')
+           plot_hwall(t,h,L(i),2)
            plot_veltip(t,v,N(i),L(i),2)
-           %plot_length(t,x,N(i),L(i),2)
+           plot_length(t,x,N(i),L(i),2)
         end
         if length(L)>1
             % maximum velocity and time required to reach it
