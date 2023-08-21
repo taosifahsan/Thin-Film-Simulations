@@ -1,5 +1,5 @@
 L = 10;
-T = 2*L;
+T = L;
 N = 200;
 NT = 1e5;
 
@@ -10,6 +10,9 @@ run_code_array(L,T,N.*L.^0,NT.*L.^0,1)
 % plot all = 1 will plot the graphs for all of them
 % plot all != 1 will only plot the maximum velocity reached vs L 
 function run_code_array(L,T,N,NT,plot_all)
+    set(groot,'defaultAxesTickLabelInterpreter','latex');  
+    set(groot,'defaulttextinterpreter','latex');
+    set(groot,'defaultLegendInterpreter','latex');
     if length(L)>1
         transition = zeros(length(L),1);
         duration = zeros(length(L),1);
@@ -20,11 +23,10 @@ function run_code_array(L,T,N,NT,plot_all)
         Nframe = min(NT(i),10^5);
         [t,x,h,v]=simulate(L(i),N(i),T(i),NT(i),Nframe);
         if plot_all == 1
-           plot_graph(L-x,h,T(i),Nframe,L(i),2,'Height')
-           plot_graph(L-x,v,T(i),Nframe,L(i),2,'Velocity')
+           plot_graph(L-x,h,T(i),Nframe,L(i),2,1)
+           plot_graph(L-x,v,T(i),Nframe,L(i),2,0)
            plot_hwall(t,h,L(i),2)
            plot_veltip(t,v,N(i),L(i),2)
-           plot_length(t,x,N(i),L(i),2)
         end
         if length(L)>1
             % maximum velocity and time required to reach it
@@ -170,14 +172,9 @@ function y = D2(f,dx)
 end 
 
 function plot_graph(x,h,T,Nframe,L,lw,ylab)
-    if ylab == 1
-        label = 'Height';
-    else
-        label = 'Velocity';
-    end
     N = length(x(:,1));
     figure 
-    plot(x(:,1),h(:,1),DisplayName = 'time = '+string(T/Nframe),LineWidth=lw)
+    plot(x(:,1),h(:,1),DisplayName = 'time $\rightarrow$ 0 ',LineWidth=lw)
     hold on
     for i = round(Nframe*0.2):round(Nframe*0.2):Nframe
         plot(x(:,i),h(:,i),DisplayName = 'time = '+string(i*T/Nframe),LineWidth=lw)
@@ -199,15 +196,11 @@ function plot_graph(x,h,T,Nframe,L,lw,ylab)
         hold off
     end
 
-    ax = gca;
-    ax.FontSize = 15; 
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    xlabel('x-axis',FontSize=15)
-    ylabel(label,FontSize=15) 
-    title('$\mathcal{L} = $ '+string(L),'Interpreter','latex',FontSize=15)
-    grid on
-    grid minor
+    if ylab == 1
+        plot_formalities('X-axis','Height, $H_0$',L)
+    else
+        plot_formalities('X-axis','Velocity, $U_0$',L)
+    end
 end
 
 function plot_veltip(t,v,N,L,lw)
@@ -215,57 +208,30 @@ function plot_veltip(t,v,N,L,lw)
     figure
     plot(t,v(N,:),DisplayName = 'Numerical',LineWidth=lw)
     hold on
-    plot(t,sqrt(4*t/pi), '--',DisplayName='$\sqrt{\frac{4T}{\pi}}$',LineWidth=lw)
+    plot(t,sqrt(4*t/pi), '--', ...
+        DisplayName='$\sqrt{\frac{4t}{\pi}}$',LineWidth=lw)
     hold on
-    plot(t,L./(1+t).^2, '-.',DisplayName='$\frac{\mathcal{L}}{(1+T)^2}$',LineWidth=lw)
+    plot(t,L./(1+t).^2, '-.', ...
+        DisplayName='$\frac{\mathcal{L}}{(1+t)^2}$',LineWidth=lw)
     hold on
-    plot(t,1-1./(t+1).^2, ':',DisplayName='$1-\frac{1}{(1+T)^2}$',LineWidth=lw)
+    plot(t,1-1./(t+1).^2, ':', ...
+        DisplayName='$1-\frac{1}{(1+t)^2}$',LineWidth=lw)
     hold off
     vmin = min(v(N,2:end));
     vmax = max(v(N,2:end));
     ylim([vmin,1.01*vmax])
     xlim([t(2),t(NT)])
-    ax = gca;
-    ax.FontSize = 15; 
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    xlabel('time, T',FontSize=15)
-    ylabel('Tip Velocity, U(T)',FontSize=15)
-    title('$\mathcal{L} = $ '+string(L),'Interpreter','latex',FontSize=15)
-    grid on
-    grid minor
+    plot_formalities('time, t','Tip Velocity, $\mathcal{U}$(t)',L)
 end
 
-function plot_length(t,x,N,L,lw)
-    figure
-    plot(t,L-x(N,:),LineWidth=lw)
-    hold off
-    
-    ax = gca;
-    ax.FontSize = 15; 
-    xlabel('time, T',FontSize=15)
-    ylabel('$\Delta \mathcal{L}$','Interpreter','latex',FontSize=15)
-    title('$\mathcal{L} = $ '+string(L),'Interpreter','latex',FontSize=15)
-    grid on
-    grid minor
-end
 
 function plot_hwall(t,h,L,lw)
     figure
     plot(t,h(1,:),LineWidth=lw,DisplayName='Numerical')
     hold on
-    plot(t,1+t,'--',LineWidth=lw,DisplayName='1+T')
+    plot(t,1+t,'--',LineWidth=lw,DisplayName='1+t')
     hold off
-
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    ax = gca;
-    ax.FontSize = 15; 
-    xlabel('time, T',FontSize=15)
-    ylabel('Height at Wall',FontSize=15)
-    title('$\mathcal{L} = $ '+string(L),'Interpreter','latex',FontSize=15)
-    grid on
-    grid minor
+    plot_formalities('time, t','Height at Wall, $H_0(X=\mathcal{L}$,t)',L)
 end
 
 function plot_vmax(L,v_max)
@@ -277,14 +243,7 @@ function plot_vmax(L,v_max)
     loglog(L,L.^0,':',LineWidth=2, DisplayName='Taylor-Culick Velocity')
     hold off
     ylim([0,1.1])
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    ax = gca;
-    ax.FontSize = 15; 
-    xlabel('$\mathcal{L}$ ','Interpreter','latex',FontSize=15)
-    ylabel('Maximum Velocity',FontSize=15)
-    grid on
-    grid minor
+    plot_formalities('$\mathcal{L}$','Maximum Velocity',L)
 end
 
 function plot_tmax(L,t_max)  
@@ -294,14 +253,7 @@ function plot_tmax(L,t_max)
     loglog(L,L,'--',LineWidth=2, DisplayName='Analytic, $\mathcal{L}\gg1$')
     hold off
     ylim([0,max(t_max)])
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    ax = gca;
-    ax.FontSize = 15; 
-    xlabel('$\mathcal{L}$ ','Interpreter','latex',FontSize=15)
-    ylabel('Time to reach Maximum Velocity',FontSize=15)
-    grid on
-    grid minor
+    plot_formalities('$\mathcal{L}$','Time to reach Maximum Velocity',L)    
 end
 
 function plot_transition(L,transition)
@@ -310,26 +262,25 @@ function plot_transition(L,transition)
     hold on
     loglog(L,L,'--',LineWidth=2, DisplayName='Analytic, $\mathcal{L}\gg1$')
     hold off
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
-    ax = gca;
-    ax.FontSize = 15; 
-    xlabel('$\mathcal{L}$ ','Interpreter','latex',FontSize=15)
-    ylabel('Time of Phase Change',FontSize=15)
-    grid on
-    grid minor
+    plot_formalities('$\mathcal{L}$ ','Time of Phase Change',L)   
 end
 
 function plot_duration(L,duration)
     figure
     semilogx(L,duration,'o',LineWidth=2,DisplayName='Simulation')
     hold off
-    l=legend(FontSize=15,Location="best");
-    set(l,'Interpreter','Latex');
+    plot_formalities('$\mathcal{L}$ ','Duration of Phase Change',L)
+end
+
+function plot_formalities(xlab,ylab,L)
+    xlabel(xlab,FontSize=15)
+    ylabel(ylab,FontSize=15)
+    if(length(L)==1)
+        title('$\mathcal{L} = $ '+string(L),FontSize=15)
+    end
     ax = gca;
     ax.FontSize = 15; 
-    xlabel('$\mathcal{L}$ ','Interpreter','latex',FontSize=15)
-    ylabel('Duration of Phase Change',FontSize=15)
+    legend(FontSize=15,Location="best");
     grid on
     grid minor
 end
