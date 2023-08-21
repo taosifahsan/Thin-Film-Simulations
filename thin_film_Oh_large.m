@@ -1,5 +1,5 @@
 L = 10;
-T = L;
+T = L/2;
 N = 200;
 NT = 1e5;
 
@@ -183,9 +183,9 @@ function plot_graph(x,h,T,Nframe,L,lw,ylab)
 
     if (L >= 10) && (T<L)   
         Lt = x(N,Nframe);
-        xplot = linspace(0,Lt,50);
-        xp = Lt-xplot;
-
+        xplot = linspace(Lt,L,50);
+        xp = xplot-Lt;
+        hold on
         if ylab == 1
             hcomp = T*exp(-(T+1)*xp/T)+1;
             plot(xplot,hcomp,'o',DisplayName = 'Analytic, time = '+string(T));
