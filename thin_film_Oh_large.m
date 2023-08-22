@@ -23,8 +23,8 @@ function run_code_array(L,T,N,NT,plot_all)
         Nframe = min(NT(i),10^5);
         [t,x,h,v]=simulate(L(i),N(i),T(i),NT(i),Nframe);
         if plot_all == 1
-           plot_graph(L-x,h,T(i),Nframe,L(i),2,1)
-           plot_graph(L-x,v,T(i),Nframe,L(i),2,0)
+           plot_graph(L(i)-x,h,T(i),Nframe,L(i),2,1)
+           plot_graph(L(i)-x,v,T(i),Nframe,L(i),2,0)
            plot_hwall(t,h,L(i),2)
            plot_veltip(t,v,N(i),L(i),2)
         end
