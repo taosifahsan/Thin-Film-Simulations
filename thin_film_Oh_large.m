@@ -242,15 +242,13 @@ function plot_vmax(L,v_max)
     hold on
     loglog(L,L.^0,':',LineWidth=2, DisplayName='Taylor-Culick Velocity')
     hold off
-    ylim([0,1.1])
+    ylim([0,1.01])
     plot_formalities('$\mathcal{L}$','Maximum Velocity',L)
 end
 
 function plot_tmax(L,t_max)  
     figure
     loglog(L,t_max,'o',LineWidth=2,DisplayName='Simulation')
-    hold on
-    loglog(L,L,'--',LineWidth=2, DisplayName='Analytic, $\mathcal{L}\gg1$')
     hold off
     ylim([0,max(t_max)])
     plot_formalities('$\mathcal{L}$','Time to reach Maximum Velocity',L)    
