@@ -1,14 +1,14 @@
-L = 10;
-T = L/2;
-N = 200;
+L = 1;
+T = 3*L;
+N = 1000;
 NT = 1e5;
 
-run_code_array(L,T,N.*L.^0,NT.*L.^0,1)
+run_code_array(L,T,N,NT,1)
 
 % Run this function to simulate and plot
 % for multiple values of L, T, N, NT. set them in an array
 % plot all = 1 will plot the graphs for all of them
-% plot all != 1 will only plot the maximum velocity reached vs L 
+% plot all != 1 will only plot the thin films varying with L
 function run_code_array(L,T,N,NT,plot_all)
     set(groot,'defaultAxesTickLabelInterpreter','latex');  
     set(groot,'defaulttextinterpreter','latex');
@@ -19,13 +19,14 @@ function run_code_array(L,T,N,NT,plot_all)
         v_max = zeros(length(L),1);
         t_max = zeros(length(L),1); 
     end
+
     for i = 1:length(L)
         Nframe = min(NT(i),10^5);
         [t,x,h,v]=simulate(L(i),N(i),T(i),NT(i),Nframe);
         if plot_all == 1
            plot_graph(L(i)-x,h,T(i),Nframe,L(i),2,1)
            plot_graph(L(i)-x,v,T(i),Nframe,L(i),2,0)
-           plot_hwall(t,h,L(i),2)
+           %plot_hwall(t,h,L(i),2)
            plot_veltip(t,v,N(i),L(i),2)
         end
         if length(L)>1
@@ -91,7 +92,7 @@ function [hf,sf] = step(dt,x,sn,tn,hn)
     hf = h_step(dt,x,sn,sf,tn,hn); % rough update hf
     
     sf = s_step(dt,dx,sn,tn,hn,hf); % accurate update of sf
-    hf = h_step(dt,x,sn,sf,tn,hn); % accurate update hf
+    %hf = h_step(dt,x,sn,sf,tn,hn); % accurate update hf
 end
 
 function sf = s_step(dt,dx,sn,tn,hn,hf)
@@ -174,12 +175,31 @@ end
 function plot_graph(x,h,T,Nframe,L,lw,ylab)
     N = length(x(:,1));
     figure 
-    plot(x(:,1),h(:,1),DisplayName = 'time $\rightarrow$ 0 ',LineWidth=lw)
+    plot(x(:,1),h(:,1),DisplayName = ...
+        'T $\rightarrow$ 0 ',LineWidth=lw)
     hold on
     for i = round(Nframe*0.2):round(Nframe*0.2):Nframe
-        plot(x(:,i),h(:,i),DisplayName = 'time = '+string(i*T/Nframe),LineWidth=lw)
+        plot(x(:,i),h(:,i),DisplayName = ...
+            'T = '+string(i*T/Nframe),LineWidth=lw)
         hold on
     end
+
+    if (L <= 0.5)    
+        Lt = x(N,round(Nframe*3/5));
+        xplot = linspace(Lt,L,20);
+        hold on
+        if ylab == 1
+            hcomp = (T*3/5)*xplot.^0+1;
+            plot(xplot,hcomp,'o',DisplayName = ...
+                'Analytic, $T$ = '+string(T*3/5));
+        else
+            vcomp = (L-xplot)/(1+3*T/5);
+            plot(xplot,vcomp,'o',DisplayName = ...
+                'Analytic, $T$ = '+string(T*3/5));
+        end
+        hold off
+    end
+
 
     if (L >= 10) && (T<L)   
         Lt = x(N,Nframe);
@@ -188,18 +208,20 @@ function plot_graph(x,h,T,Nframe,L,lw,ylab)
         hold on
         if ylab == 1
             hcomp = T*exp(-(T+1)*xp/T)+1;
-            plot(xplot,hcomp,'o',DisplayName = 'Analytic, time = '+string(T));
+            plot(xplot,hcomp,'o',DisplayName = ...
+                'Analytic, $T$ = '+string(T));
         else
             vcomp = (T+1)*exp(-(T+1)*xp/T)./(T*exp(-(T+1)*xp/T)+1);
-            plot(xplot,vcomp,'o',DisplayName = 'Analytic, time = '+string(T));
+            plot(xplot,vcomp,'o',DisplayName = ...
+                'Analytic, $T$ = '+string(T));
         end
         hold off
     end
 
     if ylab == 1
-        plot_formalities('X-axis','Height, $H_0$',L)
+        plot_formalities('X-axis','height, H(X,T)',L);
     else
-        plot_formalities('X-axis','Velocity, $U_0$',L)
+        plot_formalities('X-axis','velocity, V(X,T)',L);
     end
 end
 
@@ -209,19 +231,47 @@ function plot_veltip(t,v,N,L,lw)
     plot(t,v(N,:),DisplayName = 'Numerical',LineWidth=lw)
     hold on
     plot(t,sqrt(4*t/pi), '--', ...
-        DisplayName='$\sqrt{\frac{4t}{\pi}}$',LineWidth=lw)
+        DisplayName='$\sqrt{\frac{4T}{\pi}}$',LineWidth=lw)
     hold on
     plot(t,L./(1+t).^2, '-.', ...
-        DisplayName='$\frac{\mathcal{L}}{(1+t)^2}$',LineWidth=lw)
+        DisplayName='$\frac{\mathcal{L}}{(1+T)^2}$',LineWidth=lw)
     hold on
-    plot(t,1-1./(t+1).^2, ':', ...
-        DisplayName='$1-\frac{1}{(1+t)^2}$',LineWidth=lw)
-    hold off
+    if (L>=5)
+    plot(t,1-1./(1+t).^2, ':', ...
+        DisplayName='$1-\frac{1}{(1+T)^2}$',LineWidth=lw)
+    end
     vmin = min(v(N,2:end));
     vmax = max(v(N,2:end));
     ylim([vmin,1.01*vmax])
     xlim([t(2),t(NT)])
-    plot_formalities('time, t','Tip Velocity, $\mathcal{U}$(t)',L)
+    plot_formalities('time, T','Retraction Speed, U(T)',L);
+
+
+    axes('Position',[0.57,0.6,0.3,0.3])
+    box on
+    plot(t,v(N,:),LineWidth=2)
+    hold on
+    plot(t,sqrt(4*t/pi),'--',LineWidth=2)
+    l=plot_formalities('','',[0,1]);
+    xlim([0,min(L^2*1.1,0.1)])
+    ylim([0,min(L*1.1,sqrt(4*0.1/pi))])
+    set(l,'visible','off')
+
+
+    if(L>=5)
+        axes('Position',[0.6,0.2,0.25,0.3])
+        box on
+        plot(t,v(N,:),LineWidth=2)
+        hold on
+        plot(t,sqrt(4*t/pi),'--',LineWidth=2)
+        hold on
+        plot(t,L./(1+t).^2,'-.',LineWidth=2)
+        l1=plot_formalities('','',[0,1]);
+        xlim([L,2*L])
+        ylim([1/L/4,1/L,])
+        set(l1,'visible','off')
+    end
+
 end
 
 
@@ -229,9 +279,9 @@ function plot_hwall(t,h,L,lw)
     figure
     plot(t,h(1,:),LineWidth=lw,DisplayName='Numerical')
     hold on
-    plot(t,1+t,'--',LineWidth=lw,DisplayName='1+t')
+    plot(t,1+t,'--',LineWidth=lw,DisplayName='1+T')
     hold off
-    plot_formalities('time, t','Height at Wall, $H_0(X=\mathcal{L}$,t)',L)
+    plot_formalities('time, T','height at Wall, $H(X=\mathcal{L}$,T)',L);
 end
 
 function plot_vmax(L,v_max)
@@ -242,8 +292,9 @@ function plot_vmax(L,v_max)
     hold on
     loglog(L,L.^0,':',LineWidth=2, DisplayName='Taylor-Culick Velocity')
     hold off
-    ylim([0,1.01])
-    plot_formalities('$\mathcal{L}$','Maximum Velocity',L)
+    ylim([0,1.05])
+    xlim([L(1),L(length(L))])
+    plot_formalities('$\mathcal{L}$','maximum velocity',L);
 end
 
 function plot_tmax(L,t_max)  
@@ -251,7 +302,7 @@ function plot_tmax(L,t_max)
     loglog(L,t_max,'o',LineWidth=2,DisplayName='Simulation')
     hold off
     ylim([0,max(t_max)])
-    plot_formalities('$\mathcal{L}$','Time to reach Maximum Velocity',L)    
+    plot_formalities('$\mathcal{L}$','time to reach maximum velocity',L);    
 end
 
 function plot_transition(L,transition)
@@ -260,25 +311,25 @@ function plot_transition(L,transition)
     hold on
     loglog(L,L,'--',LineWidth=2, DisplayName='Analytic, $\mathcal{L}\gg1$')
     hold off
-    plot_formalities('$\mathcal{L}$ ','Time of Phase Change',L)   
+    plot_formalities('$\mathcal{L}$ ','time of phase change',L);   
 end
 
 function plot_duration(L,duration)
     figure
     semilogx(L,duration,'o',LineWidth=2,DisplayName='Simulation')
     hold off
-    plot_formalities('$\mathcal{L}$ ','Duration of Phase Change',L)
+    plot_formalities('$\mathcal{L}$ ','duration of phase change',L);
 end
 
-function plot_formalities(xlab,ylab,L)
+function l=plot_formalities(xlab,ylab,L)
     xlabel(xlab,FontSize=15)
     ylabel(ylab,FontSize=15)
     if(length(L)==1)
-        title('$\mathcal{L} = $ '+string(L),FontSize=15)
+       title('$\mathcal{L} = $ '+string(L),FontSize=15)
     end
     ax = gca;
     ax.FontSize = 15; 
-    legend(FontSize=15,Location="best");
+    l=legend(FontSize=15,Location="southwest");
     grid on
     grid minor
 end
